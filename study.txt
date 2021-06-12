@@ -1,0 +1,13 @@
+# day 2
+
+Django rest framework
+-Authentication classes
+-Exception classes
+-Exception Handling
+-Simple JWT documentation
+-Validation iun views and serializers
+
+Important links
+- https://django-rest-framework-simplejwt.readthedocs.io/
+- https://www.django-rest-framework.org/api-guide/exceptions
+- https://www.django-rest-framework.org/api-guide/authentication/
