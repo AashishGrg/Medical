@@ -11,3 +11,11 @@ Important links
 - https://django-rest-framework-simplejwt.readthedocs.io/
 - https://www.django-rest-framework.org/api-guide/exceptions
 - https://www.django-rest-framework.org/api-guide/authentication/
+
+#day 3
+- permissions classes
+- Update API View in detail
+- Retrieve API view in detail
+- RetrieveUpdateAPIView in detail
+- overriding default methods
+- https://www.cdrf.co/3.12/rest_framework.generics/RetrieveAPIView.html

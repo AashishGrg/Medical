@@ -1,10 +1,12 @@
 from rest_framework import status
 from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from users.api.serializers import SignupSerializer, LoginSerializer
+from users.api.serializers import SignupSerializer, LoginSerializer, ProfileSerializer, ProfileUpdateSerializer, \
+    ProfileDetailSerializer
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -43,8 +45,36 @@ class LoginAPIView(CreateAPIView):
             if not (user.is_active or user.is_verified):
                 raise ValidationError({'email': "User not activated or is unverfied"})
             token = RefreshToken.for_user(user)  # method to generating access and refresh token for users
-            print(dir(token))
             return Response({
                 'refresh': str(token),
                 'access': str(token.access_token)
             })
+
+
+class ProfileView(RetrieveAPIView):
+    serializer_class = ProfileDetailSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
+
+    # def retrieve(self, request, *args, **kwargs):
+    #     obj = self.get_object()
+    #     serializer = self.serializer_class(obj)
+    #     return Response(serializer.data)
+
+
+class ProfileUpdateAPIView(UpdateAPIView):
+    serializer_class = ProfileUpdateSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
+
+
+class ProfileDetailUpdateAPIView(RetrieveUpdateAPIView):  # using save view for retrieve and update API
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
