@@ -17,5 +17,5 @@ Important links
 - Update API View in detail
 - Retrieve API view in detail
 - RetrieveUpdateAPIView in detail
-- overriding default methods
+- overriding default generic methods
 - https://www.cdrf.co/3.12/rest_framework.generics/RetrieveAPIView.html

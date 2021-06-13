@@ -53,12 +53,12 @@ class LoginAPIView(CreateAPIView):
 
 class ProfileView(RetrieveAPIView):
     serializer_class = ProfileDetailSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)  # this line makes this view login protected
 
-    def get_object(self):
+    def get_object(self):  # overriding default behaviour og get_object that is used by retrieve API view
         return self.request.user
 
-    # def retrieve(self, request, *args, **kwargs):
+    # def retrieve(self, request, *args, **kwargs): # how retrieve api view is processing the data and giving response
     #     obj = self.get_object()
     #     serializer = self.serializer_class(obj)
     #     return Response(serializer.data)
@@ -69,7 +69,7 @@ class ProfileUpdateAPIView(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_object(self):
-        return self.request.user
+        return self.request.user  # self.request.user always returns logged in user
 
 
 class ProfileDetailUpdateAPIView(RetrieveUpdateAPIView):  # using save view for retrieve and update API
