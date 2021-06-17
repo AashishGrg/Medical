@@ -3,10 +3,11 @@ from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.api.serializers import SignupSerializer, LoginSerializer, ProfileSerializer, ProfileUpdateSerializer, \
-    ProfileDetailSerializer
+    ProfileDetailSerializer, PasswordChangeSerializer
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -78,3 +79,21 @@ class ProfileDetailUpdateAPIView(RetrieveUpdateAPIView):  # using save view for 
 
     def get_object(self):
         return self.request.user
+
+
+# Day 4 code
+class PasswordChangeAPIView(APIView):
+    serializer_class = PasswordChangeSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        serializer = PasswordChangeSerializer(data=request.data,
+                                              context={
+                                                  'user': request.user
+                                              })  # getting data from serializers and passing logged in user data to serializers using context
+        if serializer.is_valid(raise_exception=True):  # exception raise if anything goes wrong
+            password = serializer.validated_data['new_password']
+            user = request.user
+            user.set_password(password)  # setting up the new_password for user
+            user.save()
+            return Response({"success": "Password changed successfully"})

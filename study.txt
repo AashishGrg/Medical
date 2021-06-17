@@ -19,3 +19,8 @@ Important links
 - RetrieveUpdateAPIView in detail
 - overriding default generic methods
 - https://www.cdrf.co/3.12/rest_framework.generics/RetrieveAPIView.html
+
+# day 4
+- permission classes
+- validation in serializers
+- APIView in detail
