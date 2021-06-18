@@ -1,0 +1,2 @@
+Day5
+- Make schema diagram of the system in draw.io

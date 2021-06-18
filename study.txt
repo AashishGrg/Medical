@@ -24,3 +24,7 @@ Important links
 - permission classes
 - validation in serializers
 - APIView in detail
+
+#day 5
+- Model Relation (OnetoOne, ForeignKey, ManyToMany)
+- Django Models
