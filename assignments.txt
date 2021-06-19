@@ -1,2 +1,35 @@
 Day5
 - Make schema diagram of the system in draw.io
+
+Project (Pasal):
+
+-Schema diagram in draw.io
+
+Modules: User, Shop, Order, Item
+
+Admin:
+
+- Admin should be able to do CRUD operation of Items in the system
+
+User:
+- 2 user type : customer/shop_owner
+- user signup
+- user login with email
+- user password change
+- user profile Detail and Update
+
+
+Shop:
+shop Owner UserType:
+- logged in user should be able to create a shop
+- logged in user should be able to list and detail his/her shop
+- logged in user should  be able to update his shop only
+- Shop owner should be able to add items with stock quantity in his/her shop
+- Shop owner should be able to view list of orders in his/her shop only
+
+Customer:
+- customer should be ale to login
+- customer should be able to create order for a particular shop and item
+- customer should be able to list/detail his/her order
+- customer should be able to update his/her order
+
