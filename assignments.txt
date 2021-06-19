@@ -13,8 +13,8 @@ Admin:
 
 User:
 - 2 user type : customer/shop_owner
-- user signup
-- user login with email
+- user signup (first_name, last_name, permanent_address,temporary_address, phone, date_of_birth, email, password,user_type)
+- user login with email (email/password)
 - user password change
 - user profile Detail and Update
 
