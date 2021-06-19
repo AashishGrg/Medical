@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, password_validation
 from rest_framework.exceptions import ValidationError
 
+from users.models import DoctorSpeciality
+
 User = get_user_model()
 
 
@@ -70,3 +72,17 @@ class PasswordChangeSerializer(serializers.Serializer):
         if old_password == new_password:
             raise ValidationError({"new_password": "You have entered the old password as new password"})
         return attrs
+
+
+class DoctorSpecialitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DoctorSpeciality
+        fields = ('name', 'is_active')
+
+
+class DoctorSpecialityListSerializer(serializers.ModelSerializer):
+    created_by = ProfileDetailSerializer()
+
+    class Meta:
+        model = DoctorSpeciality
+        fields = '__all__'

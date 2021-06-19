@@ -56,3 +56,46 @@ class PortalUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class DoctorSpeciality(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(PortalUser, on_delete=models.CASCADE, related_name='spec_creater')
+
+    def __str__(self):
+        return self.name
+
+
+class Doctor(models.Model):
+    liscence_id = models.CharField(max_length=32, unique=True)
+    user = models.ForeignKey(PortalUser, on_delete=models.CASCADE, related_name='doctor')
+    speciality = models.ManyToManyField(DoctorSpeciality, related_name='doc_speciality')
+    is_active = models.BooleanField(default=False)
+    liscence_file = models.FileField(upload_to='media/images/doctor/liscence/')
+    is_verified = models.BooleanField(default=False)
+    degree = models.CharField(max_length=128)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.email
+
+
+class Patient(models.Model):
+    user = models.ForeignKey(PortalUser, on_delete=models.CASCADE, related_name='patient')
+    is_active = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.email
+
+
+class Examiner(models.Model):
+    liscence_id = models.CharField(max_length=32, unique=True)
+    user = models.ForeignKey(PortalUser, on_delete=models.CASCADE, related_name='examiner')
+    is_active = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    degree = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.user.email

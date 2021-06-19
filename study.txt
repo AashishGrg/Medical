@@ -28,3 +28,14 @@ Important links
 #day 5
 - Model Relation (OnetoOne, ForeignKey, ManyToMany)
 - Django Models
+
+#day6
+- study models (CASCADE,PROTECTED,SET_NULL in foreign key)
+- usage of auto_now_add and auto_add
+- related name overview
+- Nested Serializer
+- ListAPIview in detail
+- pagination classes
+- get_queryset
+- diff between get_queryset and get_object
+- overriding queryset

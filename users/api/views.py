@@ -1,14 +1,15 @@
-from rest_framework import status
 from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import get_user_model, password_validation
 
 from users.api.serializers import SignupSerializer, LoginSerializer, ProfileSerializer, ProfileUpdateSerializer, \
-    ProfileDetailSerializer, PasswordChangeSerializer
-from django.contrib.auth import get_user_model
+    ProfileDetailSerializer, PasswordChangeSerializer, DoctorSpecialitySerializer, DoctorSpecialityListSerializer
+from users.models import DoctorSpeciality
 
 User = get_user_model()
 
@@ -97,3 +98,29 @@ class PasswordChangeAPIView(APIView):
             user.set_password(password)  # setting up the new_password for user
             user.save()
             return Response({"success": "Password changed successfully"})
+
+
+class DoctorSpecialityCreateAPIView(CreateAPIView):
+    serializer_class = DoctorSpecialitySerializer
+    permission_classes = (IsAdminUser,)
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
+
+class DoctorSpecialityListAPIView(ListAPIView):
+    serializer_class = DoctorSpecialityListSerializer
+    permission_class = (IsAuthenticated,)
+    queryset = DoctorSpeciality.objects.filter(is_active=True)
+
+    def list(self, request, *args, **kwargs):
+        qs = self.get_queryset()
+        serializer = DoctorSpecialityListSerializer(qs, many=True)
+        data = serializer.data
+        data.append({
+            "total": len(qs)
+        })
+        return Response(data)
+
+    # def get_queryset(self):
+    #     return DoctorSpeciality.objects.filter(is_active=False)
