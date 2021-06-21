@@ -12,4 +12,6 @@ urlpatterns = [
     path('password/change/',PasswordChangeAPIView.as_view(),name='pwd_change'),
     path('speciality/create/',DoctorSpecialityCreateAPIView.as_view(),name='speciality'),
     path('speciality/list/',DoctorSpecialityListAPIView.as_view(),name='speciality_list'),
+    path('speciality/delete/<int:pk>/',DoctorSpecialityDeleteAPIView.as_view(),name='speciality_delete'),
+    path('speciality/<int:pk>/',DoctorSpecialityRetrieveUpdateDestroyAPIView.as_view(),name='speciality_detail'),
 ]

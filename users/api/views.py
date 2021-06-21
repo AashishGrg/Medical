@@ -1,6 +1,7 @@
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, ListAPIView, \
+    DestroyAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -122,5 +123,23 @@ class DoctorSpecialityListAPIView(ListAPIView):
         })
         return Response(data)
 
-    # def get_queryset(self):
-    #     return DoctorSpeciality.objects.filter(is_active=False)
+
+class DoctorSpecialityDeleteAPIView(DestroyAPIView):
+    serializer_class = DoctorSpecialitySerializer
+    permission_classes = (IsAdminUser,)
+
+    def delete(self, request, *args, **kwargs):
+        spec = self.kwargs['pk']  # getting id from url
+        try:
+            doc_spec = DoctorSpeciality.objects.get(id=spec)
+            doc_spec.delete()
+            return Response({"success": "Selected Speciality deleted successfully."})
+        except DoctorSpeciality.DoesNotExist:
+            raise NotFound("Speciality does not exist.")
+
+
+class DoctorSpecialityRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = DoctorSpecialitySerializer
+    permission_classes = (IsAdminUser,)
+    lookup_url_kwarg = 'pk'
+    queryset = DoctorSpeciality.objects.all()
