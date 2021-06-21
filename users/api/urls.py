@@ -14,4 +14,6 @@ urlpatterns = [
     path('speciality/list/',DoctorSpecialityListAPIView.as_view(),name='speciality_list'),
     path('speciality/delete/<int:pk>/',DoctorSpecialityDeleteAPIView.as_view(),name='speciality_delete'),
     path('speciality/<int:pk>/',DoctorSpecialityRetrieveUpdateDestroyAPIView.as_view(),name='speciality_detail'),
+    path('doctor/profile/',DoctorAPIView.as_view(),name='doctor_profile'),
+    path('doctor/profile/<int:pk>/',DoctorRetrieveUpdateDestroyAPIView.as_view(),name='doctor_profile_detail'),
 ]

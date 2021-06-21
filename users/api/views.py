@@ -1,7 +1,6 @@
-from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound, ValidationError, PermissionDenied
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, ListAPIView, \
-    DestroyAPIView, RetrieveUpdateDestroyAPIView
+    DestroyAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,8 +8,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model, password_validation
 
 from users.api.serializers import SignupSerializer, LoginSerializer, ProfileSerializer, ProfileUpdateSerializer, \
-    ProfileDetailSerializer, PasswordChangeSerializer, DoctorSpecialitySerializer, DoctorSpecialityListSerializer
-from users.models import DoctorSpeciality
+    ProfileDetailSerializer, PasswordChangeSerializer, DoctorSpecialitySerializer, DoctorSpecialityListSerializer, \
+    DoctorSerializer
+from users.models import DoctorSpeciality, Doctor
 
 User = get_user_model()
 
@@ -50,7 +50,8 @@ class LoginAPIView(CreateAPIView):
             token = RefreshToken.for_user(user)  # method to generating access and refresh token for users
             return Response({
                 'refresh': str(token),
-                'access': str(token.access_token)
+                'access': str(token.access_token),
+                'use_type': user.user_type
             })
 
 
@@ -143,3 +144,29 @@ class DoctorSpecialityRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView)
     permission_classes = (IsAdminUser,)
     lookup_url_kwarg = 'pk'
     queryset = DoctorSpeciality.objects.all()
+
+
+class DoctorAPIView(ListCreateAPIView):
+    serializer_class = DoctorSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Doctor.objects.all()
+
+    def perform_create(self, serializer):
+        if self.request.user.user_type == "doctor":
+            serializer.save(user=self.request.user, is_active=True)
+        else:
+            raise PermissionDenied("You do not have permission to create doctor profile.")
+
+
+class DoctorRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = DoctorSerializer
+    queryset = Doctor.objects.all()
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        try:
+            return Doctor.objects.get(id=self.kwargs['pk'], user=self.request.user)
+        except Doctor.DoesNotExist:
+            raise NotFound("Doctor Profile Does not exist.")

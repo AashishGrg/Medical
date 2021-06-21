@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, password_validation
 from rest_framework.exceptions import ValidationError
 
-from users.models import DoctorSpeciality
+from users.models import DoctorSpeciality, Doctor
 
 User = get_user_model()
 
@@ -86,3 +86,12 @@ class DoctorSpecialityListSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorSpeciality
         fields = '__all__'
+
+
+class DoctorSerializer(serializers.ModelSerializer):
+    user = ProfileSerializer()
+
+    class Meta:
+        model = Doctor
+        fields = ('id', 'liscence_id', 'speciality', 'liscence_file', 'degree', 'user')
+        read_only_fields = ('id', 'user')

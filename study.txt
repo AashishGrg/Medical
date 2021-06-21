@@ -40,3 +40,10 @@ Important links
 - diff between get_queryset and get_object
 - overriding queryset
 
+#day7
+- DestroyAPIView Detail
+- RetrieveUpdateDestroyAPIView Detail
+- pagination classes
+- ListCreateAPIView
+- Lookup Url kwargs = pk
+- lookup field = pk
