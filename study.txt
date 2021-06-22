@@ -47,3 +47,12 @@ Important links
 - ListCreateAPIView
 - Lookup Url kwargs = pk
 - lookup field = pk
+
+#day 8
+- django shell
+- pagination class
+- custom pagination
+- filtering
+- django_filters
+
+- https://django-filter.readthedocs.io/en/stable/guide/rest_framework.html

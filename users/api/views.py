@@ -1,7 +1,9 @@
+from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework.exceptions import NotFound, ValidationError, PermissionDenied
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, ListAPIView, \
     DestroyAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -10,7 +12,9 @@ from django.contrib.auth import get_user_model, password_validation
 from users.api.serializers import SignupSerializer, LoginSerializer, ProfileSerializer, ProfileUpdateSerializer, \
     ProfileDetailSerializer, PasswordChangeSerializer, DoctorSpecialitySerializer, DoctorSpecialityListSerializer, \
     DoctorSerializer
+from users.filters import DoctorFilter
 from users.models import DoctorSpeciality, Doctor
+from utils.custom_pagination import CustomPagination
 
 User = get_user_model()
 
@@ -148,7 +152,12 @@ class DoctorSpecialityRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView)
 
 class DoctorAPIView(ListCreateAPIView):
     serializer_class = DoctorSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = CustomPagination
+    # filter_backends = [DjangoFilterBackend]
+    filter_class = DoctorFilter
+
+    # filterset_fields = ['is_active']
 
     def get_queryset(self):
         return Doctor.objects.all()

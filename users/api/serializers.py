@@ -89,7 +89,7 @@ class DoctorSpecialityListSerializer(serializers.ModelSerializer):
 
 
 class DoctorSerializer(serializers.ModelSerializer):
-    user = ProfileSerializer()
+    # user = ProfileSerializer()
 
     class Meta:
         model = Doctor
